@@ -1,0 +1,183 @@
+systemAcad;
+
+create table usuario(
+codigo_usuario int not null AUTO_INCREMENT,
+senha varchar(30) not null,
+nivelAcesso varchar(1) not null,
+primary key(codigo_usuario)
+);
+
+create table curso(
+codigo_curso varchar(8) not null,
+nome varchar(45) not null,
+carga_horaria int not null,
+turno varchar(20) not null,
+qtde_periodo int not null,
+primary key(codigo_curso)
+);
+
+create table disciplina (
+codigo_disciplina varchar(8) not null,
+nome varchar(45) not null,
+primary key(codigo_disciplina)
+);
+
+
+create table periodo (
+codigo_periodo int not null AUTO_INCREMENT,
+nome varchar(45) not null,
+primary key(codigo_periodo)
+);
+
+create table cursoDisciplina(
+codigo_cursoDisc int not null auto_increment,
+carga_horaria int not null,
+codigo_curso varchar(8) not null,
+codigo_disciplina varchar(8) not null,
+codigo_periodo int not null,
+foreign key(codigo_curso) references  curso(codigo_curso),
+foreign key(codigo_disciplina) references  disciplina(codigo_disciplina),
+foreign key(codigo_periodo) references  periodo(codigo_periodo),
+primary key(codigo_cursoDisc)
+);
+
+
+create table professor(
+codigo_professor int not null AUTO_INCREMENT,
+cpf_professor varchar(15) not null,
+nome varchar(45) not null,
+rg varchar(9) not null,
+dtNascimento date not null,
+sexo varchar(2) not null,
+cidade varchar(45) not null,
+bairro varchar(45) not null, 
+uf varchar(2) not null,
+logradouro varchar(45) not null,
+numero varchar(15) not null,
+telefone varchar(15) not null,
+email varchar(45) not null,
+codigo_usuario int not null,
+foreign key(codigo_usuario) references  usuario(codigo_usuario),
+primary key(codigo_professor)
+);
+
+create table funcionario(
+codigo_funcionario int not null AUTO_INCREMENT,
+cpf_funcionario varchar(15) not null,
+nome varchar(45) not null,
+rg varchar(9) not null,
+dtNascimento date not null,
+sexo varchar(2) not null,
+cidade varchar(45) not null,
+bairro varchar(45) not null, 
+uf varchar(2) not null,
+logradouro varchar(45) not null,
+numero varchar(15) not null,
+telefone varchar(15) not null,
+email varchar(45) not null,
+codigo_usuario int not null,
+foreign key(codigo_usuario) references  usuario(codigo_usuario),
+primary key(codigo_funcionario)
+);
+
+
+create table aluno(
+codigo_aluno int not null AUTO_INCREMENT,
+cpf_aluno varchar(15) not null,
+nome varchar(45) not null,
+rg varchar(9) not null,
+dtNascimento date not null,
+sexo varchar(2) not null,
+cidade varchar(45) not null,
+bairro varchar(45) not null, 
+uf varchar(2) not null,
+logradouro varchar(45) not null,
+numero varchar(15) not null,
+telefone varchar(15) not null,
+email varchar(45) not null,
+codigo_usuario int not null,
+foreign key(codigo_usuario) references  usuario(codigo_usuario),
+primary key(codigo_aluno)
+);
+
+create table matricula(
+ codigo varchar(10) not null,
+ codigo_aluno int not null,
+ codigo_curso int not null,
+ dataMatricula timestamp not null,
+ foreign key(codigo_aluno) references  aluno(codigo_aluno),
+ foreign key(codigo_curso) references  curso(codigo_curso),
+ primary key(codigo)
+);
+
+
+create table professorDisciplina(
+codigo_profDisc int AUTO_INCREMENT not null,
+codigo_professor int not null,
+codigo_disciplina varchar(8) not null,
+foreign key(codigo_professor) references professor(codigo_professor),
+foreign key(codigo_disciplina) references disciplina(codigo_disciplina),
+primary key(codigo_profDisc)
+);
+
+create table aviso(
+codigo_aviso int AUTO_INCREMENT not null,
+assunto varchar(60) not null,
+dataAviso timestamp not null,
+img varchar(45) null,
+mensagem mediumtext not null,
+codigo_usuario int not null,
+foreign key(codigo_usuario) references usuario(codigo_usuario),
+primary key(codigo_aviso));
+
+create table avisoCurso(
+codigo_avisoCurso int AUTO_INCREMENT not null,
+codigo_curso varchar(8) not null,
+codigo_aviso int not null,
+foreign key(codigo_curso) references curso(codigo_curso),
+foreign key(codigo_aviso) references aviso(codigo_aviso),
+primary key(codigo_avisoCurso)
+);
+
+create table turma(
+codigo_turma varchar(10) not null,
+nome varchar(60) not null,
+horas_aula_dia time not null,
+qtde_aula_semana int not null,
+dataInicio date not null,
+dataFim date not null,
+codigo_cursoDisc int not null,
+codigo_profDisc int not null,
+foreign key(codigo_cursoDisc) references cursoDisciplina(codigo_cursoDisc),
+foreign key(codigo_profDisc) references professorDisciplina(codigo_profDisc),
+primary key(codigo_turma)
+);
+
+create table turmaAluno(
+codigo_turmaAluno int AUTO_INCREMENT not null,
+codigo_turma varchar(10) not null,
+codigo_aluno int not null,
+foreign key(codigo_turma) references turma(codigo_turma),
+foreign key(codigo_aluno) references aluno(codigo_aluno),
+primary key(codigo_turmaAluno));
+
+
+
+create table horario(
+codigo_horario int AUTO_INCREMENT not null,
+hora_inicio time not null,
+hora_fim time not null,
+turno varchar(15) not null,
+primary key(codigo_horario));
+
+create table aula(
+codigo_aula int AUTO_INCREMENT not null,
+diaSemana int not null,
+codigo_turma varchar(10)not null,
+codigo_horario int not null,
+foreign key(codigo_turma) references turma(codigo_turma),
+foreign key(codigo_horario) references horario(codigo_horario),
+primary key(codigo_aula)
+
+);
+
